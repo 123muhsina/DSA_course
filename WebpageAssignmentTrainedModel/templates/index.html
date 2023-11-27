@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Species Classifier</title>
+</head>
+<body>
+    <h1>Species Classifier</h1>
+    <form id="featureForm">
+        <label for="SL">Sepal Length:</label>
+        <input type="text" id="SL" name="SL" required>
+
+        <label for="SW">Sepal Width:</label>
+        <input type="text" id="SW" name="SW" required>
+
+        <label for="PL">Petal Length:</label>
+        <input type="text" id="PL" name="PL" required>
+
+        <label for="PW">Petal Width:</label>
+        <input type="text" id="PW" name="PW" required>
+
+        <button type="button" onclick="classify()">Classify</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        function classify() {
+            // Collect feature values
+            const SL = document.getElementById("SL").value;
+            const SW = document.getElementById("SW").value;
+            const PL = document.getElementById("PL").value;
+            const PW = document.getElementById("PW").value;
+
+            // Make an AJAX request to the Flask backend for classification
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/classify", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById("result").innerText = "Classified as: " + xhr.responseText;
+                } else {
+                    document.getElementById("result").innerText = "Error";
+                }
+            };
+
+            xhr.send(JSON.stringify({ SL, SW, PL, PW }));
+        }
+    </script>
+</body>
+</html>
